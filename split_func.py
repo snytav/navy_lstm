@@ -18,4 +18,12 @@ def split_data(stock, lookback):
     x_test = data[train_set_size:,:-1]
     y_test = data[train_set_size:,-1,:]
 
-    return [x_train, y_train, x_test, y_test]
+    import torch
+    import torch.nn as nn
+
+    x_train = torch.from_numpy(x_train).type(torch.Tensor)
+    x_test = torch.from_numpy(x_test).type(torch.Tensor)
+    y_train_lstm = torch.from_numpy(y_train).type(torch.Tensor)
+    y_test_lstm = torch.from_numpy(y_test).type(torch.Tensor)
+
+    return [x_train, y_train_lstm, x_test, y_test_lstm]

@@ -32,21 +32,12 @@ price['Close'] = scaler.fit_transform(price['Close'].values.reshape(-1,1))
 from split_func import split_data
 
 lookback = 20 # choose sequence length
-x_train, y_train, x_test, y_test = split_data(price, lookback)
-print('x_train.shape = ',x_train.shape)
-print('y_train.shape = ',y_train.shape)
-print('x_test.shape = ',x_test.shape)
-print('y_test.shape = ',y_test.shape)
+x_train, y_train_lstm, x_test, y_test_lstm = split_data(price, lookback)
+
 
 import torch
 import torch.nn as nn
 
-x_train = torch.from_numpy(x_train).type(torch.Tensor)
-x_test = torch.from_numpy(x_test).type(torch.Tensor)
-y_train_lstm = torch.from_numpy(y_train).type(torch.Tensor)
-y_test_lstm = torch.from_numpy(y_test).type(torch.Tensor)
-y_train_gru = torch.from_numpy(y_train).type(torch.Tensor)
-y_test_gru = torch.from_numpy(y_test).type(torch.Tensor)
 
 input_dim = 1
 hidden_dim = 32
