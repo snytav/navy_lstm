@@ -138,7 +138,7 @@ fig.set_figheight(6)
 fig.set_figwidth(16)
 
 import math, time
-from sklearn.metrics import mean_squared_error
+from sklearn.metrics import mean_squared_error,mean_absolute_percentage_error,mean_absolute_error
 
 # make predictions
 y_test_pred = model(x_test)
@@ -150,10 +150,14 @@ y_test_pred = scaler.inverse_transform(y_test_pred.detach().numpy())
 y_test = scaler.inverse_transform(y_test_lstm.detach().numpy())
 
 # calculate root mean squared error
+
 trainScore = math.sqrt(mean_squared_error(y_train[:,0], y_train_pred[:,0]))
 print('Train Score: %.2f RMSE' % (trainScore))
 testScore = math.sqrt(mean_squared_error(y_test[:,0], y_test_pred[:,0]))
-print('Test Score: %.2f RMSE' % (testScore))
+mae = mean_absolute_error(y_test[:,0], y_test_pred[:,0])
+mape = mean_absolute_percentage_error(y_test[:,0], y_test_pred[:,0])
+
+print('Test Score: %.2f RMSE % MAE %e ' % (testScore,mae,mape))
 # Test Score: 257.40 RMSE
 lstm.append(trainScore)
 lstm.append(testScore)
