@@ -57,28 +57,11 @@ num_epochs = 100
 from LSTM_net import LSTM
 
 model = LSTM(input_dim=input_dim, hidden_dim=hidden_dim, output_dim=output_dim, num_layers=num_layers)
-criterion = torch.nn.MSELoss(reduction='mean')
-optimiser = torch.optim.Adam(model.parameters(), lr=0.01)
 
-import time
 
-hist = np.zeros(num_epochs)
-start_time = time.time()
-lstm = []
 
-for t in range(num_epochs):
-    y_train_pred = model(x_train)
-
-    loss = criterion(y_train_pred, y_train_lstm)
-    print("Epoch ", t, "MSE: ", loss.item())
-    hist[t] = loss.item()
-
-    optimiser.zero_grad()
-    loss.backward()
-    optimiser.step()
-
-training_time = time.time()-start_time
-print("Training time: {}".format(training_time))
+from train_func import train
+y_train_pred,hist = train(num_epochs,model,x_train,y_train_lstm)
 
 predict = pd.DataFrame(scaler.inverse_transform(y_train_pred.detach().numpy()))
 original = pd.DataFrame(scaler.inverse_transform(y_train_lstm.detach().numpy()))
