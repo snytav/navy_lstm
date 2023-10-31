@@ -40,21 +40,29 @@ num_layers = 2
 output_dim = 1
 num_epochs = 100
 
-from LSTM_net import LSTM
 
-from train_func import train
-model,y_train_pred,hist = train(num_epochs,x_train,y_train_lstm,input_dim, hidden_dim,output_dim, num_layers)
+def predict(data,hidden_dim,num_layers,num_epochs):
 
-predict = pd.DataFrame(scaler.inverse_transform(y_train_pred.detach().numpy()))
-original = pd.DataFrame(scaler.inverse_transform(y_train_lstm.detach().numpy()))
+    from LSTM_net import LSTM
 
-import seaborn as sns
-sns.set_style("darkgrid")
+    from train_func import train
+    model,y_train_pred,hist = train(num_epochs,x_train,y_train_lstm,input_dim, hidden_dim,output_dim, num_layers)
 
-from neural_plot import prediction_convergence_plot
+    predict = pd.DataFrame(scaler.inverse_transform(y_train_pred.detach().numpy()))
+    original = pd.DataFrame(scaler.inverse_transform(y_train_lstm.detach().numpy()))
 
-prediction_convergence_plot(original,predict,hist)
+    import seaborn as sns
+    sns.set_style("darkgrid")
 
-from errors import predictions_and_errors
-testScore,mae,mape  = predictions_and_errors(model,x_test,y_train_pred,y_train_lstm,y_test_lstm,scaler)
-print('Test Score: %.2f RMSE %e MAE %e ' % (testScore,mae,mape))
+    from neural_plot import prediction_convergence_plot
+
+    prediction_convergence_plot(original,predict,hist)
+
+    from errors import predictions_and_errors
+    testScore,mae,mape  = predictions_and_errors(model,x_test,y_train_pred,y_train_lstm,y_test_lstm,scaler)
+    print('Test Score: %.2f RMSE %e MAE %e ' % (testScore,mae,mape))
+    return mape
+
+
+if __name__ == '__main__':
+    mape = predict(data, hidden_dim, num_layers, num_epochs)
