@@ -10,14 +10,9 @@ data.head()
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-sns.set_style("darkgrid")
-plt.figure(figsize = (15,9))
-plt.plot(data[['Close']])
-plt.xticks(range(0,data.shape[0],500),data['Date'].loc[::500],rotation=45)
-plt.title("Amazon Stock Price",fontsize=18, fontweight='bold')
-plt.xlabel('Date',fontsize=18)
-plt.ylabel('Close Price (USD)',fontsize=18)
-plt.show()
+from neural_plot import plot_close_column
+
+plot_close_column(data)
 
 """## Normalize data"""
 
@@ -47,12 +42,8 @@ num_epochs = 100
 
 from LSTM_net import LSTM
 
-model = LSTM(input_dim=input_dim, hidden_dim=hidden_dim, output_dim=output_dim, num_layers=num_layers)
-
-
-
 from train_func import train
-y_train_pred,hist = train(num_epochs,model,x_train,y_train_lstm)
+model,y_train_pred,hist = train(num_epochs,x_train,y_train_lstm,input_dim, hidden_dim,output_dim, num_layers)
 
 predict = pd.DataFrame(scaler.inverse_transform(y_train_pred.detach().numpy()))
 original = pd.DataFrame(scaler.inverse_transform(y_train_lstm.detach().numpy()))
