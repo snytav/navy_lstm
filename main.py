@@ -37,7 +37,7 @@ def predict(data,l_hidden_dim,l_num_layers,l_num_epochs,lookback):
 
     from split_func import split_data
 
-    lookback = 20  # choose sequence length
+    # lookback = 20  # choose sequence length
     x_train, y_train_lstm, x_test, y_test_lstm = split_data(price, lookback)
 
     from train_func import train
