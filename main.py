@@ -12,22 +12,10 @@ import seaborn as sns
 
 from neural_plot import plot_close_column
 
-plot_close_column(data)
+# plot_close_column(data)
 
 """## Normalize data"""
 
-price = data[['Close']]
-price.info()
-
-from sklearn.preprocessing import MinMaxScaler
-
-scaler = MinMaxScaler(feature_range=(-1, 1))
-price['Close'] = scaler.fit_transform(price['Close'].values.reshape(-1,1))
-
-from split_func import split_data
-
-lookback = 20 # choose sequence length
-x_train, y_train_lstm, x_test, y_test_lstm = split_data(price, lookback)
 
 
 import torch
@@ -39,6 +27,18 @@ import torch.nn as nn
 def predict(data,l_hidden_dim,l_num_layers,l_num_epochs,lookback):
 
     from LSTM_net import LSTM
+    price = data[['Close']]
+    price.info()
+
+    from sklearn.preprocessing import MinMaxScaler
+
+    scaler = MinMaxScaler(feature_range=(-1, 1))
+    price['Close'] = scaler.fit_transform(price['Close'].values.reshape(-1, 1))
+
+    from split_func import split_data
+
+    lookback = 20  # choose sequence length
+    x_train, y_train_lstm, x_test, y_test_lstm = split_data(price, lookback)
 
     from train_func import train
     input_dim = 1
@@ -53,7 +53,7 @@ def predict(data,l_hidden_dim,l_num_layers,l_num_epochs,lookback):
 
     from neural_plot import prediction_convergence_plot
 
-    prediction_convergence_plot(original,predict,hist)
+    # prediction_convergence_plot(original,predict,hist)
 
     from errors import predictions_and_errors
     testScore,mae,mape  = predictions_and_errors(model,x_test,y_train_pred,y_train_lstm,y_test_lstm,scaler)
