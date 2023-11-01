@@ -71,7 +71,9 @@ if __name__ == '__main__':
 
     rep = []
     for lb in [10,20]:
-        mape,mae,mse = predict(data, hidden_dim, num_layers, num_epochs, lb)
-        variant = [hidden_dim, num_layers, num_epochs, lb,mape,mae,mse]
-        rep.append(variant)
+        for nl in [2,4]:
+            mape,mae,mse = predict(data, hidden_dim, nl, num_epochs, lb)
+            variant = [hidden_dim, nl, num_epochs, lb,mape,mae,mse]
+            rep.append(variant)
     df = pd.DataFrame(rep, columns=['hidden_dim', 'num_layers', 'num_epochs', 'lookback', 'MAPE','MAE', 'MSE'])
+    df.to_csv('NN_report.csv')
