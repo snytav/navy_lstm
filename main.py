@@ -34,19 +34,16 @@ import torch
 import torch.nn as nn
 
 
-input_dim = 1
-hidden_dim = 32
-num_layers = 2
-output_dim = 1
-num_epochs = 100
 
 
-def predict(data,hidden_dim,num_layers,num_epochs):
+def predict(data,l_hidden_dim,l_num_layers,l_num_epochs,lookback):
 
     from LSTM_net import LSTM
 
     from train_func import train
-    model,y_train_pred,hist = train(num_epochs,x_train,y_train_lstm,input_dim, hidden_dim,output_dim, num_layers)
+    input_dim = 1
+    output_dim = 1
+    model,y_train_pred,hist = train(l_num_epochs,x_train,y_train_lstm,input_dim, l_hidden_dim,output_dim, l_num_layers)
 
     predict = pd.DataFrame(scaler.inverse_transform(y_train_pred.detach().numpy()))
     original = pd.DataFrame(scaler.inverse_transform(y_train_lstm.detach().numpy()))
@@ -65,4 +62,11 @@ def predict(data,hidden_dim,num_layers,num_epochs):
 
 
 if __name__ == '__main__':
-    mape = predict(data, hidden_dim, num_layers, num_epochs)
+    # input_dim = 1
+    hidden_dim = 32
+    num_layers = 2
+    # output_dim = 1
+    num_epochs = 100
+    lookback= 20
+
+    mape = predict(data, hidden_dim, num_layers, num_epochs, lookback)
