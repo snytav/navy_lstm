@@ -43,7 +43,7 @@ def predict(data,l_hidden_dim,l_num_layers,l_num_epochs,lookback):
     from train_func import train
     input_dim = 1
     output_dim = 1
-    model,y_train_pred,hist = train(l_num_epochs,x_train,y_train_lstm,input_dim, l_hidden_dim,output_dim, l_num_layers)
+    model,y_train_pred,last_mse = train(l_num_epochs,x_train,y_train_lstm,input_dim, l_hidden_dim,output_dim, l_num_layers)
 
     predict = pd.DataFrame(scaler.inverse_transform(y_train_pred.detach().numpy()))
     original = pd.DataFrame(scaler.inverse_transform(y_train_lstm.detach().numpy()))
@@ -58,7 +58,7 @@ def predict(data,l_hidden_dim,l_num_layers,l_num_epochs,lookback):
     from errors import predictions_and_errors
     testScore,mae,mape  = predictions_and_errors(model,x_test,y_train_pred,y_train_lstm,y_test_lstm,scaler)
     print('Test Score: %.2f RMSE %e MAE %e ' % (testScore,mae,mape))
-    return mape
+    return mape,mae,last_mse
 
 
 if __name__ == '__main__':
@@ -69,4 +69,9 @@ if __name__ == '__main__':
     num_epochs = 100
     lookback= 20
 
-    mape = predict(data, hidden_dim, num_layers, num_epochs, lookback)
+    rep = []
+    for lb in [10,20]:
+        mape,mae,mse = predict(data, hidden_dim, num_layers, num_epochs, lb)
+        variant = [hidden_dim, num_layers, num_epochs, lb,mape,mae,mse]
+        rep.append(variant)
+    df = pd.DataFrame(rep, columns=['hidden_dim', 'num_layers', 'num_epochs', 'lookback', 'MAPE','MAE', 'MSE'])

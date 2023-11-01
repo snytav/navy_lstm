@@ -28,4 +28,4 @@ def train(num_epochs,x_train,y_train_lstm,input_dim, hidden_dim,output_dim, num_
     training_time = time.time() - start_time
     print("Training time: {}".format(training_time))
 
-    return model,y_train_pred,hist
+    return model,y_train_pred,hist[-1]
